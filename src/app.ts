@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", async (req, res) => {
-   res.send(`Server is running on port ${configs.port}`);
+   res.send(`Docker Docs server is running on port ${configs.port}`);
 });
 
 
