@@ -103,6 +103,7 @@ docker run -p 5000:5000 imageID
 ---
 
 
+---
 ## Run a docker container with Attach `-a` or `--attach`
 1.  To run a docker container with attached terminal you can use this.
 2. To Run existing docker container:
@@ -110,14 +111,14 @@ docker run -p 5000:5000 imageID
    docker start containerName -a
 
    docker start containerName --attach
-
 ```
 3. To Attach already running docker for interactive app: 
 ```bash 
    docker attach containerName
 ```
+---
 
-
+---
 ## Detach  an container : 
 1. To Remove terminal logs or interactivity : 
 2. While running first time 
@@ -126,3 +127,4 @@ docker run -p 5000:5000 imageID
 
    docker run -p 5000:5000 --name containerName  --detach imageName
 ```
+---
