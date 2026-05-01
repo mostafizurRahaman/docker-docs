@@ -6,18 +6,19 @@
 - Enable: `Virtual Mechine platform` & `Windows Sub system for linux`
 - Save and wait for update
 
+## Docker Tools:
 
-## Docker Tools: 
-- 1. Docker Engine 
-- 2. Docker Desktop
-- 3. Docker Hub
-- 4. Docker Compose 
+-  1. Docker Engine
+-  2. Docker Desktop
+-  3. Docker Hub
+-  4. Docker Compose
 
+# SETUP DOCKER IN A PROJECT:
 
-# SETUP DOCKER IN A PROJECT: 
-- Create a docker file without any extension: 
+- Create a docker file without any extension:
 - Filename = `Dockerfile`
-   ```Dockerfile
+
+```Dockerfile
 
       FROM image:tag
 
@@ -25,11 +26,11 @@
 
       COPY package.json
 
-      RUN npm install 
+      RUN npm install
 
       COPY . .
 
-      EXPOSE 5000 
+      EXPOSE 5000
 
       CMD ["npm", "run", "dev"]
-   ```
+```
