@@ -7,7 +7,6 @@
 - Save and wait for update
 
 ## Docker Tools:
-
 -  1. Docker Engine
 -  2. Docker Desktop
 -  3. Docker Hub
@@ -66,5 +65,41 @@ Containers**, structured specifically for quick reading and study.
 | **Mutability** | **Immutable** (Cannot be changed once built).                                  | **Mutable** (Has a thin writable layer for temporary data). |
 | **Analogy**    | The **Blueprint** or the **Recipe**.                                           | The **Building** or the **Finished Dish**.                  |
 | **Storage**    | Occupies disk space.                                                           | Occupies CPU, RAM, and disk space.                          |
+
+---
+
+---
+
+## Docker images command:
+
+1. Build Image : `docker build .`
+2. Build image with tag: `docker build -t imageName:version . `
+3. Images list : `docker images -a`
+4. Running Images: `docker images`
+5. Remove Docker Image: `docker rmi imageID`
+6. Remove all unused Images: `docker images prune`
+
+---
+
+---
+
+## Docker Container commands:
+
+1. List of all containers: `docker ps -a`
+2. Running Containers list: `docker ps`
+3. Run a container from Image:
+   `docker run  -p devicePort:dockerPort imageName:tagName`
+4. Start a container: `docker container start containerID` and
+   `docker start containerID`
+5. Stop Container: `docker stop containerID` and
+   `docker container stop containerID`
+6. Start a container with interactivity: `docker run -it imageName:tagName`
+7. Remove a container: `docker rm containerID`
+8. Remove all stopped container: `docker prune`
+
+
+```cmd
+docker run -p 5000:5000 imageID
+```
 
 ---
