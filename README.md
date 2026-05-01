@@ -89,17 +89,40 @@ Containers**, structured specifically for quick reading and study.
 2. Running Containers list: `docker ps`
 3. Run a container from Image:
    `docker run  -p devicePort:dockerPort imageName:tagName`
+```bash
+docker run -p 5000:5000 imageID
+```
 4. Start a container: `docker container start containerID` and
    `docker start containerID`
 5. Stop Container: `docker stop containerID` and
    `docker container stop containerID`
 6. Start a container with interactivity: `docker run -it imageName:tagName`
 7. Remove a container: `docker rm containerID`
-8. Remove all stopped container: `docker prune`
-
-
-```cmd
-docker run -p 5000:5000 imageID
-```
+8. Remove all stopped container: `docker container prune`
 
 ---
+
+
+## Run a docker container with Attach `-a` or `--attach`
+1.  To run a docker container with attached terminal you can use this.
+2. To Run existing docker container:
+```bash 
+   docker start containerName -a
+
+   docker start containerName --attach
+
+```
+3. To Attach already running docker for interactive app: 
+```bash 
+   docker attach containerName
+```
+
+
+## Detach  an container : 
+1. To Remove terminal logs or interactivity : 
+2. While running first time 
+```bash
+   docker run -p 5000:5000  --name containerName -d imageName
+
+   docker run -p 5000:5000 --name containerName  --detach imageName
+```
