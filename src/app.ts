@@ -14,7 +14,7 @@ app.get("/", async (req, res) => {
 
 app.get('/err', async(req, res, next) =>{
     try {
-      throw new Error('This is a forced error!')
+      throw new Error('This is not only a forced error but also a cretical error!')
     } catch (error) {
       console.log(error)
       next(error)      

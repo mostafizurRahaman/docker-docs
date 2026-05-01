@@ -7,6 +7,7 @@
 - Save and wait for update
 
 ## Docker Tools:
+
 -  1. Docker Engine
 -  2. Docker Desktop
 -  3. Docker Hub
@@ -89,9 +90,11 @@ Containers**, structured specifically for quick reading and study.
 2. Running Containers list: `docker ps`
 3. Run a container from Image:
    `docker run  -p devicePort:dockerPort imageName:tagName`
+
 ```bash
 docker run -p 5000:5000 imageID
 ```
+
 4. Start a container: `docker container start containerID` and
    `docker start containerID`
 5. Stop Container: `docker stop containerID` and
@@ -102,29 +105,110 @@ docker run -p 5000:5000 imageID
 
 ---
 
-
 ---
+
 ## Run a docker container with Attach `-a` or `--attach`
-1.  To run a docker container with attached terminal you can use this.
+
+1. To run a docker container with attached terminal you can use this.
 2. To Run existing docker container:
-```bash 
+
+```bash
    docker start containerName -a
 
    docker start containerName --attach
 ```
-3. To Attach already running docker for interactive app: 
-```bash 
+
+3. To Attach already running docker for interactive app:
+
+```bash
    docker attach containerName
 ```
+
 ---
 
 ---
-## Detach  an container : 
-1. To Remove terminal logs or interactivity : 
-2. While running first time 
+
+## Detach an container :
+
+1. To Remove terminal logs or interactivity :
+2. While running first time
+
 ```bash
    docker run -p 5000:5000  --name containerName -d imageName
 
    docker run -p 5000:5000 --name containerName  --detach imageName
 ```
+
+---
+
+---
+
+# Docker Hub :
+
+## Login to your docker hub account:
+
+-  1. visit: `https://hub.docker.com/`
+-  2. create a repository. public or private
+-  3. my example repository: `mostafizurrahaman/practice`. The repo name is
+      practice and `mostafizurrahaman` is my user name.
+
+## Go to you project directory (Local mechaine):
+
+1. Login into your same docker account. Run this command:
+
+```bash
+docker login
+```
+
+## Push to Docker Hub Repo:
+
+1. Build an image which should matched with your created repository of docker
+   hub:
+
+```bash
+docker build -t  mostafizurrahaman/practice:v1 .
+```
+
+2. Note: If `dockerHubRepoName` !== `LocalImageName` push and pull will not
+   work.
+
+3. Now run this command to push:
+
+```bash
+ docker push username/repoName:tag
+
+ docker push mostafizurrahaman/practice:v1
+```
+
+![Push Image to Docker hub repo ](image.png)
+
+4. Note: If you push without any tag. The `default` tag will be latest.
+
+## Pull from Docker hub to local machine:
+
+1. use: `docker pull userName/repoName:tagName` for pull
+
+```bash
+ docker mostafizurrahaman/practice:v1
+
+```
+
+2. After running this from dockerhub a image will be added or updated into your
+   local docker hub.
+
+## Best practices:
+
+1. If you working with a team before running a container you can pull from
+   docker hub first for latest image.
+2. Then you can run the image:
+
+```bash
+docker run -p 5000:5000 -name newContainer --rm mostafizurrahaman/practice:v1
+```
+
+3. After running this command if the `image` is avaiable in local it will use
+   the local one nor it will fetch from dockerhub.
+
+4. So always pull first then build the image.
+
 ---
