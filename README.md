@@ -202,3 +202,68 @@ You build a **Node JS Application** where user uploads images.
 ```bash
    docker run -p 5000:5000 --name blogContainer  blog_app:v1
 ```
+
+### Senario 2: **Anonymous Volume**
+
+1. You can define **anonymous volume** **two** ways:
+2. **First Approch** into **Dockerfile**
+
+```Dockerfile
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json .
+RUN npm install
+
+COPY . .
+
+VOLUME ["/app/uploads"]
+
+EXPOSE 5000
+CMD ["npm", "run", "dev"]
+
+```
+
+3. **Second Approch :** into command line with **-v flag** without providing
+   **Volume Name** while run **Container**:
+
+```bash
+docker run -p 5000:5000 --name blogContainer -v /app/logs blog_app
+```
+
+4. **Anonymous Volume** are removed with **container** automatically.
+5. **Anonymous Volume** locations unknown
+6. **Anonymous Volume** is **not reusable** with another **container**
+7. **Anonymous Volume** has no **fixed name** provide an **long length string**
+   as name
+
+
+
+### Senario 3: **Named Volume**
+
+1. **Named volume** has a name
+2. **Named volume**'s location unknown in physical computer.
+3. **Named volume** can be **reused** with multiple **Container**
+4. **Named volume** persist after **Deleteing Container**. But **Anonymous** are
+   not persisting.
+5. Create **Named Volume** while running container:
+
+```bash
+  docker run -p 5000:5000 --name blogContainer -v volumeName:/app/uploads blog_app
+```
+
+6. **OR** you can create an volume first with name:
+
+```bash
+  docker volume create myVolume
+```
+
+7. Then **assign** while running the **container**
+
+```bash
+  docker run -p 5000:5000 --name blogContainer -v myVolume:/app/uploads blog_app
+```
+
+**Note 1:-** Now your **/app/uploads** images will persists.
