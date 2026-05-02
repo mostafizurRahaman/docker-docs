@@ -152,3 +152,53 @@ docker pull username/repoName:v1
 - Use `--rm` to remove temporary containers automatically after they stop.
 - If the image exists locally, Docker uses the local copy instead of downloading
   it again.
+
+# Data Management in Docker:
+
+## 🦈 Docker volume senario: **Fahim's Blog App**
+
+### Objective:
+
+You build a **Node JS Application** where user uploads images.
+
+- Uploaded Path = **/app/uploads** folders
+- **Problem 1** = Uploaded images are removed while removed **container**
+
+### Senario 1: **NO Volume Container**:
+
+1. Build an image with name
+
+```bash
+ docker build -t blog_app:v1 .
+```
+
+2. Then Run a **container** from the **image** with **`--rm`** flag. **`--rm`**
+   flags help to remove container while **stop** the container.
+
+```bash
+  docker run -p 5000:5000 --name blogContainer --rm blog_app:v1
+```
+
+3. Now the **Container Running**
+4. Suppose you **uploaded five images** and You can able to access those images
+   url into **/app/uploads** folder
+5. Now **Stop** the **Container**. Then Container Automatically removed because
+   of **--rm** flag.
+6. Run another **container** with **same name and same command**
+
+```bash
+   docker run -p 5000:5000 --name blogContainer --rm blog_app:v1
+```
+
+7. After trying to access **previous uploaded images** in **/app/uploads**
+   folder. **The uploaded images are lost**
+
+8. **Note 1 :-** To keep the **uploaded images** we need **VOLUME**.
+
+9. **Note 2 :-** If you run the container without **--rm** flag. After stop
+   **Container** will not removed after stopped. In this case **/app/uploads**
+   folder's images will **persist** until **container removed**
+
+```bash
+   docker run -p 5000:5000 --name blogContainer  blog_app:v1
+```
