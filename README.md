@@ -288,18 +288,14 @@ docker run -p 5000:5000 --name blogContainer -v /app/logs blog_app
 
 ```
 
-
-
 ### Difference between `Named Volume` and `Bind Mount`
 
 - Named Volume uses a `volume name `and `a container path`
 - Bind Mount uses `a host location` and `a container path`
-- In `Named Volume`, we do not know or control the exact `host directory `where data
-  is stored
-- In Bind Mount, we `explicitly` provide the `host path` that is connected to the
-  `container path`
-
-
+- In `Named Volume`, we do not know or control the exact `host directory `where
+  data is stored
+- In Bind Mount, we `explicitly` provide the `host path` that is connected to
+  the `container path`
 
 ## 🚀 Bind Mount with Express App (Docker)
 
@@ -315,88 +311,105 @@ docker run -p 5000:5000 \
   --rm dockerImageName:tag
 ```
 
-
 ### 🔍 Explanation
 
-   #### 🔹 `-p 5000:5000`
+#### 🔹 `-p 5000:5000`
 
-   * Maps **host port → container port**
-   * Access the app via: `http://localhost:5000`
+- Maps **host port → container port**
+- Access the app via: `http://localhost:5000`
 
+#### 🔹 `--name dockerContainerName`
 
+- Assigns a custom name to the container
+- Helps in managing container easily (`stop`, `logs`, etc.)
 
-   #### 🔹 `--name dockerContainerName`
+#### 🔹 `-v logVolumes:/app/logs` (Named Volume)
 
-   * Assigns a custom name to the container
-   * Helps in managing container easily (`stop`, `logs`, etc.)
+- Creates a **named volume** called `logVolumes`
+- Mounted to `/app/logs` inside container
+- Used for **persistent data (e.g., logs)**
+- Data remains even after container is removed
 
-   
+#### 🔹 `-w /app`
 
-   #### 🔹 `-v logVolumes:/app/logs` (Named Volume)
+- Sets the **working directory** inside container
+- Equivalent to running:
 
-   * Creates a **named volume** called `logVolumes`
-   * Mounted to `/app/logs` inside container
-   * Used for **persistent data (e.g., logs)**
-   * Data remains even after container is removed
+```bash
+cd /app
+```
 
-   
+#### 🔹 `-v $(pwd):/app` (Bind Mount)
 
-   #### 🔹 `-w /app`
+- Mounts current project directory into container
+- Syncs **host ↔ container** in real-time
 
-   * Sets the **working directory** inside container
-   * Equivalent to running:
+👉 Any code change on host is instantly reflected in container
 
-   ```bash
-   cd /app
-   ```
+#### 🔹 `-v /app/node_modules` (Anonymous Volume)
 
-   
+- Prevents overwriting of `node_modules` by bind mount
+- Keeps container dependencies isolated
 
-   #### 🔹 `-v $(pwd):/app` (Bind Mount)
+👉 Important when using bind mount in Node.js apps
 
-   * Mounts current project directory into container
-   * Syncs **host ↔ container** in real-time
+#### 🔹 `--rm`
 
-   👉 Any code change on host is instantly reflected in container
+- Automatically removes the container when it stops
+- Useful for **temporary/dev environments**
 
+#### 🔹 `dockerImageName:tag`
 
+- Specifies which Docker image to run
+- Example:
 
-   #### 🔹 `-v /app/node_modules` (Anonymous Volume)
+```bash
+my-express-app:latest
+```
 
-   * Prevents overwriting of `node_modules` by bind mount
-   * Keeps container dependencies isolated
+### 🧠 Architecture Overview
 
-   👉 Important when using bind mount in Node.js apps
+```text
+Host Machine
+│
+├── Project Folder  ───────▶  /app (Bind Mount)
+│
+├── (Docker Managed) ─────▶  /app/logs (Named Volume)
+│
+└── (Isolated Volume) ────▶  /app/node_modules (Anonymous Volume)
+```
 
-   
-
-   #### 🔹 `--rm`
-
-   * Automatically removes the container when it stops
-   * Useful for **temporary/dev environments**
-
-   
-
-   #### 🔹 `dockerImageName:tag`
-
-   * Specifies which Docker image to run
-   * Example:
-
-   ```bash
-   my-express-app:latest
-   ```
-
-   
-
-   ### 🧠 Architecture Overview
-
-   ```text
-   Host Machine
-   │
-   ├── Project Folder  ───────▶  /app (Bind Mount)
-   │
-   ├── (Docker Managed) ─────▶  /app/logs (Named Volume)
-   │
-   └── (Isolated Volume) ────▶  /app/node_modules (Anonymous Volume)
-   ```
 ---
+
+### Bind Mount Setup with `Dev container Extension` of `VS CODE`
+
+- install `dev-container` extension
+- create a folder with `.devcontainer`
+- create a file inside the folder `devcontainer.json`
+- and edit this content:
+
+```json
+{
+   "name": "ts-container",
+   "image": "node:20",
+   "workspaceFolder": "/app",
+   "mounts": [
+      // Bind mount for your local project
+      "source=/c/Projects/next-level/Docker/docker-with-typescipt-backend,target=/app,type=bind",
+
+      // Named volume for logs (similar to: -v ts-docker-logs://app/logs)
+      "source=ts-docker-logs,target=/app/logs,type=volume",
+
+      // Anonymous volume for node_modules (similar to: -v //app/node_modules)
+      "target=/app/node_modules,type=volume"
+   ],
+   "runArgs": [
+      "--name",
+      "ts-container",
+      "-p",
+      "5000:5000",
+      "--rm" // Automatically remove the container after exiting VS Code
+   ],
+   "postCreateCommand": "npm install"
+}
+```
