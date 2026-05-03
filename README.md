@@ -381,7 +381,7 @@ Host Machine
 
 ---
 
-### Bind Mount Setup with `Dev container Extension` of `VS CODE`
+## 🛠️⚒️🛠️ Bind Mount Setup with `Dev container Extension` of `VS CODE`
 
 - install `dev-container` extension
 - create a folder with `.devcontainer`
