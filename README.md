@@ -239,8 +239,6 @@ docker run -p 5000:5000 --name blogContainer -v /app/logs blog_app
 7. **Anonymous Volume** has no **fixed name** provide an **long length string**
    as name
 
-
-
 ### Senario 3: **Named Volume**
 
 1. **Named volume** has a name
@@ -267,3 +265,138 @@ docker run -p 5000:5000 --name blogContainer -v /app/logs blog_app
 ```
 
 **Note 1:-** Now your **/app/uploads** images will persists.
+
+## Bind Mount:
+
+- Bind mount helps to connect **your local machine (host machine) folder to**
+  with **Container some folder**.
+- Both folder are getting synchronous.
+- If you change in local that will reflect inside container
+- If you change inside container that will reflect in your local
+
+### How can we implement bind mount:
+
+1. You have to `mount` a your `local folder` with `container` by using `volume`
+2. use this syntax: `-v local_folder_path:container_folder_path`
+
+```bash
+   -v "//c/Users/mosta/OneDrive/Desktop/docker-with-typescript-backend"://app
+
+   #OR
+
+   -v "//$(pwd)"://app
+
+```
+
+
+
+### Difference between `Named Volume` and `Bind Mount`
+
+- Named Volume uses a `volume name `and `a container path`
+- Bind Mount uses `a host location` and `a container path`
+- In `Named Volume`, we do not know or control the exact `host directory `where data
+  is stored
+- In Bind Mount, we `explicitly` provide the `host path` that is connected to the
+  `container path`
+
+
+
+## 🚀 Bind Mount with Express App (Docker)
+
+#### 🧾 Run Container
+
+```bash
+docker run -p 5000:5000 \
+  --name dockerContainerName \
+  -v logVolumes:/app/logs \
+  -w /app \
+  -v $(pwd):/app \
+  -v /app/node_modules \
+  --rm dockerImageName:tag
+```
+
+
+### 🔍 Explanation
+
+   #### 🔹 `-p 5000:5000`
+
+   * Maps **host port → container port**
+   * Access the app via: `http://localhost:5000`
+
+
+
+   #### 🔹 `--name dockerContainerName`
+
+   * Assigns a custom name to the container
+   * Helps in managing container easily (`stop`, `logs`, etc.)
+
+   
+
+   #### 🔹 `-v logVolumes:/app/logs` (Named Volume)
+
+   * Creates a **named volume** called `logVolumes`
+   * Mounted to `/app/logs` inside container
+   * Used for **persistent data (e.g., logs)**
+   * Data remains even after container is removed
+
+   
+
+   #### 🔹 `-w /app`
+
+   * Sets the **working directory** inside container
+   * Equivalent to running:
+
+   ```bash
+   cd /app
+   ```
+
+   
+
+   #### 🔹 `-v $(pwd):/app` (Bind Mount)
+
+   * Mounts current project directory into container
+   * Syncs **host ↔ container** in real-time
+
+   👉 Any code change on host is instantly reflected in container
+
+
+
+   #### 🔹 `-v /app/node_modules` (Anonymous Volume)
+
+   * Prevents overwriting of `node_modules` by bind mount
+   * Keeps container dependencies isolated
+
+   👉 Important when using bind mount in Node.js apps
+
+   
+
+   #### 🔹 `--rm`
+
+   * Automatically removes the container when it stops
+   * Useful for **temporary/dev environments**
+
+   
+
+   #### 🔹 `dockerImageName:tag`
+
+   * Specifies which Docker image to run
+   * Example:
+
+   ```bash
+   my-express-app:latest
+   ```
+
+   
+
+   ### 🧠 Architecture Overview
+
+   ```text
+   Host Machine
+   │
+   ├── Project Folder  ───────▶  /app (Bind Mount)
+   │
+   ├── (Docker Managed) ─────▶  /app/logs (Named Volume)
+   │
+   └── (Isolated Volume) ────▶  /app/node_modules (Anonymous Volume)
+   ```
+---
