@@ -413,3 +413,111 @@ Host Machine
    "postCreateCommand": "npm install"
 }
 ```
+
+## 📲📲📲 DOCKER COMMUNICATION
+
+- There a 3 types of docker communicaion happens:
+
+1. `Container` to `WWW (External world)`:
+2. `Container` to `Host Mechaine` Communication
+3. `Container` to `Container` communication
+
+### 1. `Container` to `WWW` Communication:
+
+- `Container` to `WWW` communication happens automatically. We don't need to
+  anything else.
+
+#### `Senario 1`:
+
+- Suppose you have an express application running on port `5000`
+- You connect your **Mongo DB Atlas remote uri**
+
+```env
+ DB_URL=mongodb+srv://userName:userPass@cluster0.qii6fpb.mongodb.net/docker_ts?appName=Cluster0
+```
+
+- And you want `fetch` some data from an `external server`.
+
+```typescript
+// A Route to load data from another server and reutrn
+app.get("/todos", async (req: Request, res: Response) => {
+   // 1. External server uri:
+   const externalServerUri = `https://jsonplaceholder.typicode.com/todos`;
+
+   const response = await fetch(externalServerUri);
+   const todos = await response.json();
+   return res.status(200).json(todos);
+});
+```
+
+- In Docker you don't need do anything to `connect` or `fetch` any `www` url. By
+  using
+
+### 2. `Container` to `Host Mechaine` communication:
+
+- Inside `Container`, `localhost` refers that `container` itself not the
+  `Host Machine`.
+- While you have some server in you `Host machine`, to establish communication
+  with `container`, you have use `host.docker.internal` this instead of
+  `localhost`
+
+- `host.docker.internal` refers `Host machine ip address`. Dockers internaly
+  handle it.
+
+#### `Senario For host machine communication`:
+
+- Suppose you a `express application` in you `containerized`.
+- In your host machine `MongoDB server` installed locally
+- you want you connect `mongodb://localhost:27017` with this link, will get an
+  error.
+- To `Resolve this error` instead of `localhost` use `host.docker.internal`
+- Because `localhost` refers container itself.
+- `host.docker.internal` refers host machine IP.
+
+```bash
+   mongodb://host.docker.internal:27017
+```
+
+### 3. `Container` to `Container` Communicaton:
+
+#### `Option 1` With `IP ADDRESS`:
+
+- Each container has own `IP` Address.
+- To Communicate with each other, You can use thier IP.
+- By using `docker container inspect containerName` you can get the container IP
+  address.
+- MongoDB container example:
+
+```bash
+   mongodb://ip_address_of_mongodb:27017 # Place holder
+
+   mongodb://172.0.0.3:27017 # Real example
+```
+
+#### `Option 2` With `Docker Network` **(Recommended)**:
+
+- In this case, you have to create a newtork with default type `bridge`
+
+```bash
+   docker network create newNetworkName
+```
+
+- You have to `connect` all `container` with that network by using
+  `--network newNetworkName` while running container
+
+```bash
+ # Container 1: (Server)
+ docker run -p  5000:5000 --name serverContainer -w //app -v logsVolume://app/logs -v "$(pwd)"://app -v //app/node_modules --network newNetworkName --rm dockerImageName
+
+ # Container 2: (MongoDB Database)
+ docker run --name mongodb-container --newtork newNetworkName mongo
+
+
+```
+
+- Now you can communicate by using `container` name instead of ip in url:
+- MongoDB Container URI Example:
+
+```bash
+mongodb://mongodb-container:27017
+```
