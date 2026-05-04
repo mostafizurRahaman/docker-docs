@@ -519,5 +519,9 @@ app.get("/todos", async (req: Request, res: Response) => {
 - MongoDB Container URI Example:
 
 ```bash
-mongodb://mongodb-container:27017
+
+mongodb://CONTAINER_NAME:27017 ## PLACEHOLDER
+
+
+mongodb://mongodb-container:27017 
 ```
