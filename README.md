@@ -523,5 +523,9 @@ app.get("/todos", async (req: Request, res: Response) => {
 mongodb://CONTAINER_NAME:27017 ## PLACEHOLDER
 
 
-mongodb://mongodb-container:27017 
+mongodb://mongodb-container:27017
 ```
+
+## A complete example of 3 Apps (BACKEND, DATABASE, NEXT JS ) Container communications:
+
+--> [Please visit](3_container_communication.md)
