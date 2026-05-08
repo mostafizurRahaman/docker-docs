@@ -175,7 +175,7 @@ next-env.d.ts
 ```
 
 - update `dev` command. Add `--poll` flag if you are using `ts-node-dev` to run
-  the server. ![Docker Command Be](docker_image_Be.png)
+  the server. ![Docker Command Be](./docker_image_Be.png)
 
 ---
 
